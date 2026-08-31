@@ -86,7 +86,8 @@ Default section order:
 
 ## Child DOX Index
 
-- `plays/model-price-scout/` — LiteLLM pricing scout (iPhone target)
-- `plays/pkg-vet/` — Package vetting hero (MacBook target)
-- `plays/release-notes/` — Changelog composer with gated-write (iPad target)
-- `plays/git-hygiene/` — Git cleanup audit (stretch/range)
+- `plays/` — 4 rote play packages (main.ts + resources/ + deps.toml each). Play-local AGENTS.md removed to satisfy `FLOW_UNSUPPORTED_COMPANION` lint — contracts now live in `STRATEGY.md §5` and play frontmatter.
+  - `plays/model-price-scout/` — LiteLLM pricing scout (iPhone target)
+  - `plays/pkg-vet/` — Package vetting hero (MacBook target)
+  - `plays/release-notes/` — Changelog composer with gated-write (iPad target)
+  - `plays/git-hygiene/` — Git cleanup audit (stretch/range)
