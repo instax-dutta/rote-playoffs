@@ -1,0 +1,1 @@
+{"env_files": [".env", "backend/.env"], "example_files": [".env.example"], "env_key_count": 5, "example_key_count": 6, "common_count": 5, "missing_in_env": ["LOG_LEVEL"], "extra_in_env": [], "drift_count": 1}

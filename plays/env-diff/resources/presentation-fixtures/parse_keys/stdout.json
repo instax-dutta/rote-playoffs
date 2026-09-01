@@ -1,0 +1,1 @@
+{".env": {"keys": ["DB_HOST", "DB_PORT", "API_KEY", "JWT_SECRET"], "count": 4, "category": "env_files"}, "backend/.env": {"keys": ["DB_HOST", "DB_PORT", "REDIS_URL"], "count": 3, "category": "env_files"}, ".env.example": {"keys": ["DB_HOST", "DB_PORT", "API_KEY", "JWT_SECRET", "REDIS_URL", "LOG_LEVEL"], "count": 6, "category": "example_files"}}

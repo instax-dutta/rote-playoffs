@@ -1,6 +1,6 @@
 # Rote Playoffs — PlaybookAcademy
 
-7 multi-step DAG Plays for the [Rote Playoffs](https://luma.com/rotehack) hackathon. Zero credentials, cold-pull ready.
+10 multi-step DAG Plays for the [Rote Playoffs](https://luma.com/rotehack) hackathon. Zero credentials, cold-pull ready.
 
 ## Plays
 
@@ -13,6 +13,9 @@
 | 5 | **docker-scrub** | reclaim Docker disk space safely | 4 steps, 4 layers | `rote play run https://play.modiqo.ai/playbookacademy/docker-scrub@1.2.0` |
 | 6 | **token-audit** | AI prompt bloat + API cost projector | 4 steps, 4 layers | `rote play run https://play.modiqo.ai/playbookacademy/token-audit@1.2.0 dir=.` |
 | 7 | **auth-scan** | auth security audit for Express/Node.js | 5 steps, 3 layers | `rote play run https://play.modiqo.ai/playbookacademy/auth-scan@1.1.0 src=./backend/src` |
+| 8 | **env-diff** | .env drift auditor | 5 steps, 3 layers | `rote play run https://play.modiqo.ai/playbookacademy/env-diff@1.0.0 src=.` |
+| 9 | **readme-health** | README completeness auditor | 5 steps, 3 layers | `rote play run https://play.modiqo.ai/playbookacademy/readme-health@1.0.0 src=.` |
+| 10 | **api-health** | API endpoint health monitor | 4 steps, 2 layers | `rote play run https://play.modiqo.ai/playbookacademy/api-health@1.0.0 src=./routes` |
 
 ## Design principles
 
@@ -33,6 +36,9 @@ plays/
   docker-scrub/         # Docker disk cleanup
   token-audit/          # AI token budget auditor
   auth-scan/            # Auth security audit for Express/Node.js
+  env-diff/             # .env drift auditor
+  readme-health/        # README completeness auditor
+  api-health/           # API endpoint health monitor
 ```
 
 Each play is a self-contained package: `main.ts` + `resources/` + `deps.toml`.

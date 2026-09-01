@@ -1,0 +1,11 @@
+schema_version = 1
+
+[[tools]]
+id = "python3"
+command = "python3"
+required = true
+version_requirement = ">=3.10"
+
+[[tools.install]]
+manager = "brew"
+package = "python@3.10"

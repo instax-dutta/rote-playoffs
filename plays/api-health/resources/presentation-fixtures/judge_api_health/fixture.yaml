@@ -1,0 +1,8 @@
+schema_version: 1
+kind: process.exec
+status:
+  exit: { kind: code, code: 0 }
+  duration_ms: 50
+  timeout_ms: 15000
+stdout: resources/presentation-fixtures/judge_api_health/stdout.json
+stderr: resources/presentation-fixtures/judge_api_health/stderr.txt

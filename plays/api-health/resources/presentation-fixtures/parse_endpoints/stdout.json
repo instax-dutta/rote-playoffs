@@ -1,0 +1,1 @@
+[{"method": "GET", "path": "/api/health", "source": "routes/health.js"}, {"method": "GET", "path": "/api/users", "source": "routes/users.js"}, {"method": "POST", "path": "/api/users", "source": "routes/users.js"}, {"method": "GET", "path": "/api/posts", "source": "routes/posts.js"}, {"method": "POST", "path": "/api/posts", "source": "routes/posts.js"}]

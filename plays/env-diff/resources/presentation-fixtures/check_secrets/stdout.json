@@ -1,0 +1,1 @@
+{"findings": [{"file": ".env", "line": 3, "type": "potential_secret", "key": "API_KEY"}], "count": 1, "risk_level": "high"}
