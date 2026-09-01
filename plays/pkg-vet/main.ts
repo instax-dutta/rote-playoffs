@@ -4,13 +4,13 @@
  * name: pkg-vet
  * version: 1.1.0
  * description: |
- *   Vet npm/PyPI/crates packages BEFORE installing: OSV advisories, typosquat distance, maintainer and repo signals, download trends, license flags. Read-only, no credentials. Complements (does not replace) installed-lockfile scanners such as modiqo/dependency-vulnerability-check.
+ *   Vet npm/PyPI/crates packages BEFORE installing. Checks OSV advisories, typosquat distance, package age, version count, maintainer signals, and license flags. Returns a deterministic verdict (SAFE / CAUTION / AVOID) with per-source evidence and a stage ledger. Read-only, no credentials. Complements (does not replace) installed-lockfile scanners such as modiqo/dependency-vulnerability-check.
  * provenance:
  *   author: playbookacademy
  *   workspace: pkg-vet
  * metadata:
  *   rote_version: 0.76.0
- *   version: 1.1.0
+ *   version: 1.2.0
  *   status: released
  *   execution_model: steps_with_presentation
  *   flow_type: parallel
@@ -22,16 +22,20 @@
  *     - job-dependency-vetting
  *     - audience-developers
  *     - effect-read-only
+ *     - multi-step-dag
+ *     - value-edges
  * parameters:
  * - name: packages
  *   type: string
  *   required: true
- *   description: Comma-separated package names to vet, e.g. zod,left-pad,react
+ *   description: Comma-separated package names to vet
+ *   example: zod,left-pad,react
  * - name: ecosystems
  *   type: string
  *   required: false
  *   default: auto
  *   description: Comma-separated ecosystems (npm,pypi,cargo), or auto-detect
+ *   example: npm,pypi
  * steps:
  *   parse_input:
  *     type: process.exec

@@ -1,0 +1,1 @@
+{"docker_version": "27.3.1", "reclaimable": {"dangling_images": {"count": 2, "description": "2 untagged images"}, "unused_volumes": {"count": 1, "description": "1 unused volumes"}, "build_cache": {"count": 2, "size_mb": 2048.0, "description": "2 build cache entries (2048.0 MB)"}}, "total_reclaimable_mb": 2158.0, "warnings": ["Images: 12.5GB total", "Build Cache: 3.2GB total"]}

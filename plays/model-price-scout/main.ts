@@ -4,13 +4,13 @@
  * name: model-price-scout
  * version: 1.0.0
  * description: |
- *   Cheapest capable model, right now. Fetches live pricing from LiteLLM's public model catalog, classifies by capability tier, filters by your criteria, ranks cheapest-per-M-input-token, and prints a decision table. Read-only, no credentials, no auth. Complements (does not replace) modiqo/hello, which surfaces pricing as one of nine subsystems.
+ *   Cheapest capable model, right now. Fetches live pricing from LiteLLM's public model catalog, classifies by capability tier (flagship / mid / fast / embedding), filters by provider and budget, ranks cheapest-per-M-input- token, and prints a decision table. Read-only, no credentials, no auth. Complements (does not replace) modiqo/hello, which surfaces pricing as one of nine subsystems.
  * provenance:
  *   author: playbookacademy
  *   workspace: model-price-scout
  * metadata:
  *   rote_version: 0.76.0
- *   version: 1.1.0
+ *   version: 1.2.0
  *   status: released
  *   execution_model: steps_with_presentation
  *   flow_type: sequential
@@ -22,27 +22,34 @@
  *     - job-model-selection
  *     - audience-developers
  *     - effect-read-only
+ *     - multi-step-dag
+ *     - value-edges
  * parameters:
  * - name: tier
  *   type: string
  *   required: false
  *   default: auto
- *   description: Capability tier filter — flagship, mid, fast, embedding, or auto (all)
+ *   description: Capability tier filter
+ *   example: mid
+ *   valid_values: flagship, mid, fast, embedding, auto
  * - name: providers
  *   type: string
  *   required: false
  *   default: all
- *   description: Optional provider filter — comma-separated (openai,anthropic,google,bedrock), or all
+ *   description: Provider filter (comma-separated)
+ *   example: openai,anthropic
  * - name: max_results
  *   type: integer
  *   required: false
  *   default: 10
  *   description: Maximum rows in the decision table
+ *   example: '10'
  * - name: budget_per_mtok
  *   type: number
  *   required: false
  *   default: 0
- *   description: Optional budget ceiling per M input tokens (0 = no ceiling)
+ *   description: Budget ceiling per M input tokens (0 = no ceiling)
+ *   example: '1.5'
  * steps:
  *   fetch_catalog:
  *     type: process.exec

@@ -76,20 +76,26 @@ There is no pitch to hide behind. A judge pulls your URI cold on a machine you'v
 
 ## 1.5 Published plays — live and verified (Aug 29)
 
-All four plays are published, public, and verified working from their canonical URIs:
+All six plays are published, public, and verified working from their canonical URIs:
 
-| # | Play | URI | Target prize | Downloads (Aug 29) |
+| # | Play | URI | Target prize | Steps |
 |---|------|-----|---|---|
-| 1 | **model-price-scout** | https://play.modiqo.ai/playbookacademy/model-price-scout@0.1.0 | iPhone (reusability) | 1 |
-| 2 | **pkg-vet** | https://play.modiqo.ai/playbookacademy/pkg-vet@0.1.0 | MacBook (adoption) | 1 |
-| 3 | **release-notes** | https://play.modiqo.ai/playbookacademy/release-notes@0.1.0 | iPad (clarity) | 1 |
-| 4 | **git-hygiene** | https://play.modiqo.ai/playbookacademy/git-hygiene@0.1.0 | Stretch / range | 1 |
+| 1 | **pkg-vet** | https://play.modiqo.ai/playbookacademy/pkg-vet@1.1.0 | MacBook (adoption) | 5 steps, 3 layers |
+| 2 | **model-price-scout** | https://play.modiqo.ai/playbookacademy/model-price-scout@1.1.0 | iPhone (reusability) | 4 steps, 4 layers |
+| 3 | **release-notes** | https://play.modiqo.ai/playbookacademy/release-notes@1.1.0 | iPad (clarity) | 4 steps, 4 layers |
+| 4 | **git-hygiene** | https://play.modiqo.ai/playbookacademy/git-hygiene@1.1.0 | Stretch / range | 5 steps, 3 layers |
+| 5 | **docker-scrub** | https://play.modiqo.ai/playbookacademy/docker-scrub@1.1.0 | Range / Docker | 4 steps, 4 layers |
+| 6 | **token-audit** | https://play.modiqo.ai/playbookacademy/token-audit@1.1.0 | Range / AI | 4 steps, 4 layers |
+
+**All plays are multi-step DAGs with value edges, stage ledgers, two-lane failure models, and gated writes (where applicable). All pass lint cleanly with presentation fixtures.**
 
 **Direct links for sharing:**
-- model-price-scout: https://play.modiqo.ai/playbookacademy/model-price-scout@0.1.0
-- pkg-vet: https://play.modiqo.ai/playbookacademy/pkg-vet@0.1.0
-- release-notes: https://play.modiqo.ai/playbookacademy/release-notes@0.1.0
-- git-hygiene: https://play.modiqo.ai/playbookacademy/git-hygiene@0.1.0
+- pkg-vet: https://play.modiqo.ai/playbookacademy/pkg-vet@1.1.0
+- model-price-scout: https://play.modiqo.ai/playbookacademy/model-price-scout@1.1.0
+- release-notes: https://play.modiqo.ai/playbookacademy/release-notes@1.1.0
+- git-hygiene: https://play.modiqo.ai/playbookacademy/git-hygiene@1.1.0
+- docker-scrub: https://play.modiqo.ai/playbookacademy/docker-scrub@1.1.0
+- token-audit: https://play.modiqo.ai/playbookacademy/token-audit@1.1.0
 
 **Inspect/play commands:**
 ```
@@ -262,12 +268,22 @@ steps:
 
 ---
 
-## 6. Execution plan — pickup Aug 31 Mon, season Sep 1-6 Tue-Sun
+## 6. Execution plan — COMPLETED: All 6 plays published at v1.1.0
 
-| Day | Focus | Definition of done |
+| Day | Focus | Status |
 |---|---|---|
-| **Mon Aug 31 (TODAY)** | `rote login` + claim handle (permanent author namespace `playbookacademy`), `rote setup`, `/play what's new`, warm-up laps `hello` + `dns-propagation-check` (inspect first). Then lint + local run all 4 scaffolded plays, fix frontmatter/deps wiring, test `apply=false` gates on throwaway repos | Handle claimed; 2 warm-up laps run; all 4 plays pass `rote play lint` + local `rote play run` |
-| **Tue Sep 1 morning** | Final cold-pull rehearsal from pristine dir for all 4 plays; stranger-test descriptions; re-read ANNOUNCEMENT.md; confirm Discord + kickoff 4pm UK reminder; nothing shipped before kickoff | All 4 plays green at freeze; zero debt → kickoff |
+| **Mon Aug 31** | `rote login` + claim handle `playbookacademy`, warm-up laps, lint + local run all 4 plays | DONE |
+| **Tue Sep 1 morning** | Final cold-pull rehearsal, stranger-test descriptions | DONE |
+| **Tue Sep 1 post-kickoff** | Restructure all plays from monoliths to multi-step DAGs, add presentation fixtures, publish at v1.1.0 | DONE |
+| **Tue Sep 1 evening** | Create 2 new plays (docker-scrub, token-audit), publish at v1.1.0 | DONE |
+
+### Current state (Sep 1, ~10:00 UTC)
+
+- 6 plays published at v1.1.0, all public, all ready to run
+- All plays are multi-step DAGs with value edges
+- All plays pass lint cleanly with presentation fixtures
+- All plays verified working locally and from registry
+- Social media posts drafted in `SOCIAL_POSTS.md`
 
 ### Phase B: Season week Sep 1-6 (the iteration flywheel replaces a fixed schedule)
 

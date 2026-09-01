@@ -4,13 +4,13 @@
  * name: git-hygiene
  * version: 1.0.0
  * description: |
- *   The cleanup nobody wants by hand. Audits a git repo for stale branches, unpushed work, dirty worktrees, merged-but-not-pruned branches — one sweep with a safe --prune mode behind the same apply=true gate. Read-only by default; writes only on explicit opt-in.
+ *   The cleanup nobody wants by hand. Audits a git repo for stale branches, unpushed work, dirty worktrees, merged-but-not-pruned branches — one sweep with a safe prune mode behind the apply=true gate. Read-only by default; writes only on explicit opt-in.
  * provenance:
  *   author: playbookacademy
  *   workspace: git-hygiene
  * metadata:
  *   rote_version: 0.76.0
- *   version: 1.1.0
+ *   version: 1.2.0
  *   status: released
  *   execution_model: steps_with_presentation
  *   flow_type: parallel
@@ -22,17 +22,21 @@
  *     - job-git-cleanup
  *     - audience-developers
  *     - effect-gated-write
+ *     - multi-step-dag
+ *     - value-edges
  * parameters:
  * - name: repo_path
  *   type: string
  *   required: false
  *   default: .
- *   description: 'Path to the git repository (default: current directory)'
+ *   description: Path to the git repository
+ *   example: .
  * - name: apply
  *   type: string
  *   required: false
  *   default: 'false'
- *   description: 'Set true to prune merged branches (default: dry-run report)'
+ *   description: 'Set true to prune merged branches (default: dry-run)'
+ *   example: 'false'
  * steps:
  *   scan_branches:
  *     type: process.exec

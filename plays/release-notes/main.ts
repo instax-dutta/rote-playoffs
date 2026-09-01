@@ -10,7 +10,7 @@
  *   workspace: release-notes
  * metadata:
  *   rote_version: 0.76.0
- *   version: 1.1.0
+ *   version: 1.2.0
  *   status: released
  *   execution_model: steps_with_presentation
  *   flow_type: sequential
@@ -22,27 +22,33 @@
  *     - job-release-notes
  *     - audience-developers
  *     - effect-gated-write
+ *     - multi-step-dag
+ *     - value-edges
  * parameters:
  * - name: from_ref
  *   type: string
  *   required: false
  *   default: HEAD~10
- *   description: 'Start of range (tag, SHA, or ref). Default: HEAD~10'
+ *   description: Start of range (tag, SHA, or ref)
+ *   example: v1.4.0
  * - name: to_ref
  *   type: string
  *   required: false
  *   default: HEAD
- *   description: 'End of range (tag, SHA, or ref). Default: HEAD'
+ *   description: End of range (tag, SHA, or ref)
+ *   example: v1.5.0
  * - name: apply
  *   type: string
  *   required: false
  *   default: 'false'
  *   description: 'Set true to create the release (default: dry-run)'
+ *   example: 'false'
  * - name: repo_path
  *   type: string
  *   required: false
  *   default: .
- *   description: 'Path to the git repository (default: current directory)'
+ *   description: Path to the git repository
+ *   example: .
  * steps:
  *   fetch_commits:
  *     type: process.exec

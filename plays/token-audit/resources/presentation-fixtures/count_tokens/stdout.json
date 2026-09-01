@@ -1,0 +1,1 @@
+[{"path": "/project/prompts/system.txt", "token_count": 600, "line_count": 45, "char_count": 2400, "ok": true}, {"path": "/project/prompts/context.md", "token_count": 2125, "line_count": 120, "char_count": 8500, "ok": true}, {"path": "/project/instructions.txt", "token_count": 300, "line_count": 20, "char_count": 1200, "ok": true}]

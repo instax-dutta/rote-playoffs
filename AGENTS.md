@@ -86,8 +86,10 @@ Default section order:
 
 ## Child DOX Index
 
-- `plays/` — 4 rote play packages (main.ts + resources/ + deps.toml each). Play-local AGENTS.md removed to satisfy `FLOW_UNSUPPORTED_COMPANION` lint — contracts now live in `STRATEGY.md §5` and play frontmatter.
-  - `plays/model-price-scout/` — LiteLLM pricing scout (iPhone target)
-  - `plays/pkg-vet/` — Package vetting hero (MacBook target)
-  - `plays/release-notes/` — Changelog composer with gated-write (iPad target)
-  - `plays/git-hygiene/` — Git cleanup audit (stretch/range)
+- `plays/` — 6 rote play packages (main.ts + resources/ + deps.toml each). Play-local AGENTS.md removed to satisfy `FLOW_UNSUPPORTED_COMPANION` lint — contracts now live in `STRATEGY.md §5` and play frontmatter.
+  - `plays/pkg-vet/` — Package vetting hero (MacBook target). 5-step DAG: parse_input -> [fetch_registry || check_osv || check_typosquat] -> compute_verdict.
+  - `plays/model-price-scout/` — LiteLLM pricing scout (iPhone target). 4-step DAG: fetch_catalog -> classify_models -> filter_models -> rank_and_format.
+  - `plays/release-notes/` — Changelog composer with gated-write (iPad target). 4-step DAG: fetch_commits -> classify_commits -> build_changelog -> apply_release.
+  - `plays/git-hygiene/` — Git cleanup audit (stretch/range). 5-step DAG: [scan_branches || scan_merged || scan_worktrees] -> analyze_hygiene -> apply_prune.
+  - `plays/docker-scrub/` — Docker disk cleanup. 4-step DAG: scan_docker -> analyze_space -> compute_plan -> execute_cleanup.
+  - `plays/token-audit/` — AI token budget auditor. 4-step DAG: scan_prompts -> count_tokens -> analyze_budget -> generate_report.
