@@ -2,23 +2,18 @@
  * @rote-frontmatter
  * ---
  * name: model-price-scout
- * version: "0.1.0"
- * description: >
- *   Cheapest capable model, right now. Fetches live pricing from LiteLLM's
- *   public model catalog, ranks cheapest-per-M-input-token by capability tier
- *   (flagship / mid / fast / embedding), flags context-window tradeoffs, and
- *   prints a decision table. Read-only, no credentials, no auth. Complements
- *   (does not replace) modiqo/hello, which surfaces pricing as one of nine
- *   subsystems — this is a dedicated, opinionated price scout.
+ * version: 1.0.0
+ * description: |
+ *   Cheapest capable model, right now. Fetches live pricing from LiteLLM's public model catalog, classifies by capability tier, filters by your criteria, ranks cheapest-per-M-input-token, and prints a decision table. Read-only, no credentials, no auth. Complements (does not replace) modiqo/hello, which surfaces pricing as one of nine subsystems.
  * provenance:
  *   author: playbookacademy
  *   workspace: model-price-scout
  * metadata:
- *   rote_version: 0.75.0
- *   version: 0.1.0
+ *   rote_version: 0.76.0
+ *   version: 1.1.0
  *   status: released
  *   execution_model: steps_with_presentation
- *   flow_type: parallel
+ *   flow_type: sequential
  *   requires_endpoints: []
  *   requires_sessions: false
  *   discoverability:
@@ -28,37 +23,69 @@
  *     - audience-developers
  *     - effect-read-only
  * parameters:
- *   - name: tier
- *     type: string
- *     required: false
- *     default: auto
- *     description: "Capability tier filter — flagship, mid, fast, embedding, or auto (all)"
- *   - name: providers
- *     type: string
- *     required: false
- *     default: all
- *     description: "Optional provider filter — comma-separated (openai,anthropic,google,bedrock), or all"
- *   - name: max_results
- *     type: integer
- *     required: false
- *     default: 10
- *     description: "Maximum rows in the decision table"
- *   - name: budget_per_mtok
- *     type: number
- *     required: false
- *     default: 0
- *     description: "Optional budget ceiling per M input tokens (0 = no ceiling)"
+ * - name: tier
+ *   type: string
+ *   required: false
+ *   default: auto
+ *   description: Capability tier filter — flagship, mid, fast, embedding, or auto (all)
+ * - name: providers
+ *   type: string
+ *   required: false
+ *   default: all
+ *   description: Optional provider filter — comma-separated (openai,anthropic,google,bedrock), or all
+ * - name: max_results
+ *   type: integer
+ *   required: false
+ *   default: 10
+ *   description: Maximum rows in the decision table
+ * - name: budget_per_mtok
+ *   type: number
+ *   required: false
+ *   default: 0
+ *   description: Optional budget ceiling per M input tokens (0 = no ceiling)
  * steps:
- *   fetch_and_classify:
+ *   fetch_catalog:
  *     type: process.exec
  *     timeout_ms: 60000
  *     argv:
  *     - python3
- *     - "@resource{classify_and_rank.py}"
+ *     - '@resource{fetch_catalog.py}'
+ *   classify_models:
+ *     type: process.exec
+ *     depends_on:
+ *     - fetch_catalog
+ *     timeout_ms: 30000
+ *     argv:
+ *     - python3
+ *     - '@resource{classify_models.py}'
+ *     - '@fetch_catalog{$.stdout.text | fromjson | .file}'
+ *   filter_models:
+ *     type: process.exec
+ *     depends_on:
+ *     - classify_models
+ *     timeout_ms: 15000
+ *     argv:
+ *     - python3
+ *     - '@resource{filter_models.py}'
+ *     - '@classify_models{$.stdout.text | fromjson | .file}'
  *     - $tier
  *     - $providers
- *     - $max_results
  *     - $budget_per_mtok
+ *   rank_and_format:
+ *     type: process.exec
+ *     depends_on:
+ *     - filter_models
+ *     timeout_ms: 15000
+ *     argv:
+ *     - python3
+ *     - '@resource{rank_and_format.py}'
+ *     - '@filter_models{$.stdout.text | fromjson | .file}'
+ *     - $max_results
+ * presentation_fixtures:
+ *   fetch_catalog: resources/presentation-fixtures/fetch_catalog/fixture.yaml
+ *   classify_models: resources/presentation-fixtures/classify_models/fixture.yaml
+ *   filter_models: resources/presentation-fixtures/filter_models/fixture.yaml
+ *   rank_and_format: resources/presentation-fixtures/rank_and_format/fixture.yaml
  * ---
  */
 
@@ -70,15 +97,39 @@ import {
 
 const out = new FlowOutput();
 const ctx = await loadPresentationContext();
-const classify = ctx.step(stepName("fetch_and_classify"));
 
-// The classify step emits JSON to stdout; parse it for the structured result.
+// Read all step outcomes
+const fetchCatalog = ctx.step(stepName("fetch_catalog"));
+const classifyModels = ctx.step(stepName("classify_models"));
+const filterModels = ctx.step(stepName("filter_models"));
+const rankAndFormat = ctx.step(stepName("rank_and_format"));
+
+// Stage ledger
+const ledger: Record<string, string> = {};
+const stepStates = [
+  { name: "fetch_catalog", step: fetchCatalog },
+  { name: "classify_models", step: classifyModels },
+  { name: "filter_models", step: filterModels },
+  { name: "rank_and_format", step: rankAndFormat },
+];
+for (const s of stepStates) {
+  const status = s.step.outcome.status;
+  if (status === "completed" || status === "restored") {
+    ledger[s.name] = "ok";
+  } else if (status === "degraded") {
+    ledger[s.name] = "degraded";
+  } else {
+    ledger[s.name] = status;
+  }
+}
+
+// Parse the final output from rank_and_format step
 let table: unknown = null;
 let meta: Record<string, unknown> = {};
 let error: string | null = null;
 
 try {
-  const outcome = classify.outcome;
+  const outcome = rankAndFormat.outcome;
   if (outcome.status === "completed" || outcome.status === "restored") {
     const body = outcome.output?.body as Record<string, unknown> | undefined;
     const stdout = (body?.stdout as Record<string, unknown> | undefined)?.text;
@@ -93,15 +144,15 @@ try {
         table = parsed;
       }
     } else {
-      error = "Step produced no output";
+      error = "rank_and_format produced no output";
     }
   } else if (outcome.status === "failed") {
-    error = String(outcome.error ?? "Step failed");
+    error = String(outcome.error ?? "rank_and_format failed");
   } else {
-    error = `Step status: ${outcome.status}`;
+    error = `rank_and_format status: ${outcome.status}`;
   }
 } catch (e: any) {
-  error = `Failed to parse classify output: ${e.message}`;
+  error = `Failed to parse output: ${e.message}`;
 }
 
 const tier = String(ctx.params?.tier ?? "auto");
@@ -109,7 +160,7 @@ const providers = String(ctx.params?.providers ?? "all");
 const maxResults = Number(ctx.params?.max_results ?? 10);
 const budget = Number(ctx.params?.budget_per_mtok ?? 0);
 
-out.human(buildHuman(table, meta, error, tier, providers, maxResults, budget));
+out.human(buildHuman(table, meta, error, tier, providers, maxResults, budget, ledger));
 out.summary(
   typeof meta?.count === "number"
     ? `${meta.count} models ranked · tier=${tier} · providers=${providers}`
@@ -120,6 +171,7 @@ out.result({
   meta,
   error,
   params: { tier, providers, max_results: maxResults, budget_per_mtok: budget },
+  ledger,
 });
 
 function buildHuman(
@@ -130,6 +182,7 @@ function buildHuman(
   providers: string,
   maxResults: number,
   budget: number,
+  ledger: Record<string, string>,
 ): string {
   if (error) {
     return `model-price-scout — ERROR: ${error}`;
@@ -141,6 +194,14 @@ function buildHuman(
   const lines: string[] = [];
   lines.push(`MODEL PRICE SCOUT — ${String(meta?.count ?? table.length)} models ranked`);
   lines.push(`tier: ${tier} · providers: ${providers} · budget: ${budget > 0 ? `$${budget}/Mtok` : "none"}`);
+  lines.push("");
+
+  // Stage ledger
+  lines.push("Stage Ledger:");
+  for (const [name, state] of Object.entries(ledger)) {
+    const marker = state === "ok" ? "OK" : state === "degraded" ? "DEG" : state.toUpperCase();
+    lines.push(`  ${name}: ${marker}`);
+  }
   lines.push("");
 
   // Header

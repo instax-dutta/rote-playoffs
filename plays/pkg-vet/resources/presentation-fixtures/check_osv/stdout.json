@@ -1,0 +1,1 @@
+"[{\"package\": \"lodahs\", \"ecosystem\": \"npm\", \"vulns\": [{\"id\": \"GHSA-hm6q-r2jc-cpqh\", \"severity\": \"HIGH\", \"summary\": \"lodahs is malware\"}, {\"id\": \"MAL-2025-25502\", \"severity\": \"MODERATE\", \"summary\": \"Malicious code in lodahs (npm)\"}], \"ok\": true}]\n"
