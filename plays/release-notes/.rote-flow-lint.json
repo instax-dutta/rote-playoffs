@@ -1,0 +1,9 @@
+{
+  "flow_name": "./main.ts",
+  "flow_path": "./main.ts",
+  "static_checks_passed": true,
+  "runtime_checks_passed": true,
+  "violations": [],
+  "linted_at": "2026-09-01T01:36:20.959432Z",
+  "rote_version": "0.77.0"
+}

@@ -1,6 +1,6 @@
 # Rote Playoffs — PlaybookAcademy
 
-6 multi-step DAG Plays for the [Rote Playoffs](https://luma.com/rotehack) hackathon. Zero credentials, cold-pull ready.
+7 multi-step DAG Plays for the [Rote Playoffs](https://luma.com/rotehack) hackathon. Zero credentials, cold-pull ready.
 
 ## Plays
 
@@ -12,6 +12,7 @@
 | 4 | **git-hygiene** | the cleanup nobody wants by hand | 5 steps, 3 layers | `rote play run https://play.modiqo.ai/playbookacademy/git-hygiene@1.2.0 repo_path=.` |
 | 5 | **docker-scrub** | reclaim Docker disk space safely | 4 steps, 4 layers | `rote play run https://play.modiqo.ai/playbookacademy/docker-scrub@1.2.0` |
 | 6 | **token-audit** | AI prompt bloat + API cost projector | 4 steps, 4 layers | `rote play run https://play.modiqo.ai/playbookacademy/token-audit@1.2.0 dir=.` |
+| 7 | **auth-scan** | auth security audit for Express/Node.js | 5 steps, 3 layers | `rote play run https://play.modiqo.ai/playbookacademy/auth-scan@1.1.0 src=./backend/src` |
 
 ## Design principles
 
@@ -31,6 +32,7 @@ plays/
   git-hygiene/          # Git cleanup audit (stretch/range)
   docker-scrub/         # Docker disk cleanup
   token-audit/          # AI token budget auditor
+  auth-scan/            # Auth security audit for Express/Node.js
 ```
 
 Each play is a self-contained package: `main.ts` + `resources/` + `deps.toml`.

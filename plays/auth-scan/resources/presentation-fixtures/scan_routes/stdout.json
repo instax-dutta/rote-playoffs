@@ -1,0 +1,1 @@
+[{"path": "src/routes/auth.js", "name": "auth.js", "size_bytes": 2400, "is_auth_file": true}, {"path": "src/middleware/authMiddleware.js", "name": "authMiddleware.js", "size_bytes": 1200, "is_auth_file": true}, {"path": "src/controllers/userController.js", "name": "userController.js", "size_bytes": 3100, "is_auth_file": false}]
